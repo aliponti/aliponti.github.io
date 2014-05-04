@@ -1,16 +1,18 @@
 #main {
-	background-color: #FFF;
+	background-color: #AAA;
 	height: 300px;
 	width: 300px;
 	margin-top: 20px;
 	margin-right: auto;
 	margin-left: auto;
+	padding: 10px;
+	border-radius: 10px;
 }
 body {
-	background-color: #666;
+	background-color: #FFF;
 }
 .field {
-	background-color: #FFF;
+	background-color: #CCC;
 	margin: 0px;
 	padding: 0px;
 	float: left;
