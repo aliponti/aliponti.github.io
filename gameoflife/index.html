@@ -1,24 +1,44 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>Conway's Game of Life</title>
 <link href="gof_style.css" rel="stylesheet" type="text/css" />
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script src="gameOfLife.js"></script>
 <script>
 
-var playField = new Array(30);
+/* Standart size of the field */
+var xWidth = 70;
+var yWidth = 50;
+
+var playField = new Array(yWidth);
+
+/* Standart interval time in milliseconds */
+var interval = 115;
+
 var running = false;
 
-for(var i = 0; i < 30; i++){
-	playField[i] = new Array(30);
-	for(var x = 0; x < 30; x++){
-		playField[i][x] = 0;
+/* Initialize playfield */
+for(var y = 0; y < yWidth; y++){
+	playField[y] = new Array(xWidth);
+	for(var x = 0; x < xWidth; x++){
+		playField[y][x] = 0;
 	}
 }
 
+/* Document ready, initializing main-field and onclick-functions */
 $(function(){
+
+   $( "#main" ).width( 10 * xWidth ); 
+   $( "#main" ).height( 10 * yWidth );
+   
+	for(var y = 0; y < yWidth; y++){
+		for(var x = 0; x < xWidth; x++){
+			$( "#main" ).append('<div class="field" id="f' + y + '_' + x + '"></div>');
+		}
+	}
+   
 	$( ".field" ).click(function(){
 		if(!running){
 			$( "#"+this.id ).toggleClass( "active" );
@@ -34,43 +54,56 @@ $(function(){
 			}
 		}
 	});
+	
 	var runInterval;
 	$( ".buttons" ).click(function(){
 		running = !running;
 		if(running){
 			$( "#play" ).attr("id", "pause");
-			runInterval = setInterval(function(){run()},115);
+			runInterval = setInterval(function(){run()},interval);
 		}
 		else {
 			$( "#pause" ).attr("id", "play");
 			clearInterval(runInterval);
 		}
 	});
-	$( "#stop" ).click(function() {
+	$( "#stop" ).click(function(){
 		running = false;
 		clearInterval(runInterval);
 		$( "#pause" ).attr("id", "play");
-		for(var i = 0; i < 30; i++){
-			for(var x = 0; x < 30; x++){
-				playField[i][x] = 0;
+		for(var y = 0; y < yWidth; y++){
+			for(var x = 0; x < xWidth; x++){
+				playField[y][x] = 0;
 			}
 		}
 		display();
 	});
+	$( "#random" ).click(function(){
+		if(!running){
+		   randomField(0.34)
+		}
+	});
+
 });
 
+/*
+ * Runs the Game of Life algorythm
+ */
 function run(){
-	if(running){
-		playField = gameOfLife(30, 30, playField);
-		display();
-	}
 	
+	if(running){
+		playField = gameOfLife(yWidth, xWidth, playField);
+		display();
+	}	
 }
 
-function display(){
+/**
+ * Displays the current playfield
+ */
+function display(){	
 	
-	for(var y = 0; y < 30; y++){
-		for(var x = 0; x < 30; x++){
+	for(var y = 0; y < yWidth; y++){
+		for(var x = 0; x < xWidth; x++){
 			if(playField[y][x] == 1){
 				$( "#f" + y + "_" + x).addClass("active");
 			}
@@ -78,8 +111,31 @@ function display(){
 				$( "#f" + y + "_" + x).removeClass("active");
 			}
 		}
+	}	
+}
+
+/*
+ * Creates a field with random cells on it
+ * 
+ * Parameters:
+ * 
+ * percentage ... value between 0 and 1, indicates how many cells are 
+ *                going to be displayed
+ */
+function randomField(percentage){
+
+	for(var y = 0; y < yWidth; y++){
+		playField[y] = new Array(xWidth);
+		for(var x = 0; x < xWidth; x++){
+         var r = Math.random();
+         if( r < percentage ){
+            playField[y][x] = 1;
+         } else {			
+				playField[y][x] = 0;
+			}
+		}
 	}
-	
+	display();
 }
 
 </script>
@@ -87,912 +143,12 @@ function display(){
 
 <body>
 <div id="main">
-	
-    			<div class="field" id="f0_0"></div>
-    			<div class="field" id="f0_1"></div>
-    			<div class="field" id="f0_2"></div>
-    			<div class="field" id="f0_3"></div>
-    			<div class="field" id="f0_4"></div>
-    			<div class="field" id="f0_5"></div>
-    			<div class="field" id="f0_6"></div>
-    			<div class="field" id="f0_7"></div>
-    			<div class="field" id="f0_8"></div>
-    			<div class="field" id="f0_9"></div>
-    			<div class="field" id="f0_10"></div>
-    			<div class="field" id="f0_11"></div>
-    			<div class="field" id="f0_12"></div>
-    			<div class="field" id="f0_13"></div>
-    			<div class="field" id="f0_14"></div>
-    			<div class="field" id="f0_15"></div>
-    			<div class="field" id="f0_16"></div>
-    			<div class="field" id="f0_17"></div>
-    			<div class="field" id="f0_18"></div>
-    			<div class="field" id="f0_19"></div>
-    			<div class="field" id="f0_20"></div>
-    			<div class="field" id="f0_21"></div>
-    			<div class="field" id="f0_22"></div>
-    			<div class="field" id="f0_23"></div>
-    			<div class="field" id="f0_24"></div>
-    			<div class="field" id="f0_25"></div>
-    			<div class="field" id="f0_26"></div>
-    			<div class="field" id="f0_27"></div>
-    			<div class="field" id="f0_28"></div>
-    			<div class="field" id="f0_29"></div>
-    			<div class="field" id="f1_0"></div>
-    			<div class="field" id="f1_1"></div>
-    			<div class="field" id="f1_2"></div>
-    			<div class="field" id="f1_3"></div>
-    			<div class="field" id="f1_4"></div>
-    			<div class="field" id="f1_5"></div>
-    			<div class="field" id="f1_6"></div>
-    			<div class="field" id="f1_7"></div>
-    			<div class="field" id="f1_8"></div>
-    			<div class="field" id="f1_9"></div>
-    			<div class="field" id="f1_10"></div>
-    			<div class="field" id="f1_11"></div>
-    			<div class="field" id="f1_12"></div>
-    			<div class="field" id="f1_13"></div>
-    			<div class="field" id="f1_14"></div>
-    			<div class="field" id="f1_15"></div>
-    			<div class="field" id="f1_16"></div>
-    			<div class="field" id="f1_17"></div>
-    			<div class="field" id="f1_18"></div>
-    			<div class="field" id="f1_19"></div>
-    			<div class="field" id="f1_20"></div>
-    			<div class="field" id="f1_21"></div>
-    			<div class="field" id="f1_22"></div>
-    			<div class="field" id="f1_23"></div>
-    			<div class="field" id="f1_24"></div>
-    			<div class="field" id="f1_25"></div>
-    			<div class="field" id="f1_26"></div>
-    			<div class="field" id="f1_27"></div>
-    			<div class="field" id="f1_28"></div>
-    			<div class="field" id="f1_29"></div>
-    			<div class="field" id="f2_0"></div>
-    			<div class="field" id="f2_1"></div>
-    			<div class="field" id="f2_2"></div>
-    			<div class="field" id="f2_3"></div>
-    			<div class="field" id="f2_4"></div>
-    			<div class="field" id="f2_5"></div>
-    			<div class="field" id="f2_6"></div>
-    			<div class="field" id="f2_7"></div>
-    			<div class="field" id="f2_8"></div>
-    			<div class="field" id="f2_9"></div>
-    			<div class="field" id="f2_10"></div>
-    			<div class="field" id="f2_11"></div>
-    			<div class="field" id="f2_12"></div>
-    			<div class="field" id="f2_13"></div>
-    			<div class="field" id="f2_14"></div>
-    			<div class="field" id="f2_15"></div>
-    			<div class="field" id="f2_16"></div>
-    			<div class="field" id="f2_17"></div>
-    			<div class="field" id="f2_18"></div>
-    			<div class="field" id="f2_19"></div>
-    			<div class="field" id="f2_20"></div>
-    			<div class="field" id="f2_21"></div>
-    			<div class="field" id="f2_22"></div>
-    			<div class="field" id="f2_23"></div>
-    			<div class="field" id="f2_24"></div>
-    			<div class="field" id="f2_25"></div>
-    			<div class="field" id="f2_26"></div>
-    			<div class="field" id="f2_27"></div>
-    			<div class="field" id="f2_28"></div>
-    			<div class="field" id="f2_29"></div>
-    			<div class="field" id="f3_0"></div>
-    			<div class="field" id="f3_1"></div>
-    			<div class="field" id="f3_2"></div>
-    			<div class="field" id="f3_3"></div>
-    			<div class="field" id="f3_4"></div>
-    			<div class="field" id="f3_5"></div>
-    			<div class="field" id="f3_6"></div>
-    			<div class="field" id="f3_7"></div>
-    			<div class="field" id="f3_8"></div>
-    			<div class="field" id="f3_9"></div>
-    			<div class="field" id="f3_10"></div>
-    			<div class="field" id="f3_11"></div>
-    			<div class="field" id="f3_12"></div>
-    			<div class="field" id="f3_13"></div>
-    			<div class="field" id="f3_14"></div>
-    			<div class="field" id="f3_15"></div>
-    			<div class="field" id="f3_16"></div>
-    			<div class="field" id="f3_17"></div>
-    			<div class="field" id="f3_18"></div>
-    			<div class="field" id="f3_19"></div>
-    			<div class="field" id="f3_20"></div>
-    			<div class="field" id="f3_21"></div>
-    			<div class="field" id="f3_22"></div>
-    			<div class="field" id="f3_23"></div>
-    			<div class="field" id="f3_24"></div>
-    			<div class="field" id="f3_25"></div>
-    			<div class="field" id="f3_26"></div>
-    			<div class="field" id="f3_27"></div>
-    			<div class="field" id="f3_28"></div>
-    			<div class="field" id="f3_29"></div>
-    			<div class="field" id="f4_0"></div>
-    			<div class="field" id="f4_1"></div>
-    			<div class="field" id="f4_2"></div>
-    			<div class="field" id="f4_3"></div>
-    			<div class="field" id="f4_4"></div>
-    			<div class="field" id="f4_5"></div>
-    			<div class="field" id="f4_6"></div>
-    			<div class="field" id="f4_7"></div>
-    			<div class="field" id="f4_8"></div>
-    			<div class="field" id="f4_9"></div>
-    			<div class="field" id="f4_10"></div>
-    			<div class="field" id="f4_11"></div>
-    			<div class="field" id="f4_12"></div>
-    			<div class="field" id="f4_13"></div>
-    			<div class="field" id="f4_14"></div>
-    			<div class="field" id="f4_15"></div>
-    			<div class="field" id="f4_16"></div>
-    			<div class="field" id="f4_17"></div>
-    			<div class="field" id="f4_18"></div>
-    			<div class="field" id="f4_19"></div>
-    			<div class="field" id="f4_20"></div>
-    			<div class="field" id="f4_21"></div>
-    			<div class="field" id="f4_22"></div>
-    			<div class="field" id="f4_23"></div>
-    			<div class="field" id="f4_24"></div>
-    			<div class="field" id="f4_25"></div>
-    			<div class="field" id="f4_26"></div>
-    			<div class="field" id="f4_27"></div>
-    			<div class="field" id="f4_28"></div>
-    			<div class="field" id="f4_29"></div>
-    			<div class="field" id="f5_0"></div>
-    			<div class="field" id="f5_1"></div>
-    			<div class="field" id="f5_2"></div>
-    			<div class="field" id="f5_3"></div>
-    			<div class="field" id="f5_4"></div>
-    			<div class="field" id="f5_5"></div>
-    			<div class="field" id="f5_6"></div>
-    			<div class="field" id="f5_7"></div>
-    			<div class="field" id="f5_8"></div>
-    			<div class="field" id="f5_9"></div>
-    			<div class="field" id="f5_10"></div>
-    			<div class="field" id="f5_11"></div>
-    			<div class="field" id="f5_12"></div>
-    			<div class="field" id="f5_13"></div>
-    			<div class="field" id="f5_14"></div>
-    			<div class="field" id="f5_15"></div>
-    			<div class="field" id="f5_16"></div>
-    			<div class="field" id="f5_17"></div>
-    			<div class="field" id="f5_18"></div>
-    			<div class="field" id="f5_19"></div>
-    			<div class="field" id="f5_20"></div>
-    			<div class="field" id="f5_21"></div>
-    			<div class="field" id="f5_22"></div>
-    			<div class="field" id="f5_23"></div>
-    			<div class="field" id="f5_24"></div>
-    			<div class="field" id="f5_25"></div>
-    			<div class="field" id="f5_26"></div>
-    			<div class="field" id="f5_27"></div>
-    			<div class="field" id="f5_28"></div>
-    			<div class="field" id="f5_29"></div>
-    			<div class="field" id="f6_0"></div>
-    			<div class="field" id="f6_1"></div>
-    			<div class="field" id="f6_2"></div>
-    			<div class="field" id="f6_3"></div>
-    			<div class="field" id="f6_4"></div>
-    			<div class="field" id="f6_5"></div>
-    			<div class="field" id="f6_6"></div>
-    			<div class="field" id="f6_7"></div>
-    			<div class="field" id="f6_8"></div>
-    			<div class="field" id="f6_9"></div>
-    			<div class="field" id="f6_10"></div>
-    			<div class="field" id="f6_11"></div>
-    			<div class="field" id="f6_12"></div>
-    			<div class="field" id="f6_13"></div>
-    			<div class="field" id="f6_14"></div>
-    			<div class="field" id="f6_15"></div>
-    			<div class="field" id="f6_16"></div>
-    			<div class="field" id="f6_17"></div>
-    			<div class="field" id="f6_18"></div>
-    			<div class="field" id="f6_19"></div>
-    			<div class="field" id="f6_20"></div>
-    			<div class="field" id="f6_21"></div>
-    			<div class="field" id="f6_22"></div>
-    			<div class="field" id="f6_23"></div>
-    			<div class="field" id="f6_24"></div>
-    			<div class="field" id="f6_25"></div>
-    			<div class="field" id="f6_26"></div>
-    			<div class="field" id="f6_27"></div>
-    			<div class="field" id="f6_28"></div>
-    			<div class="field" id="f6_29"></div>
-    			<div class="field" id="f7_0"></div>
-    			<div class="field" id="f7_1"></div>
-    			<div class="field" id="f7_2"></div>
-    			<div class="field" id="f7_3"></div>
-    			<div class="field" id="f7_4"></div>
-    			<div class="field" id="f7_5"></div>
-    			<div class="field" id="f7_6"></div>
-    			<div class="field" id="f7_7"></div>
-    			<div class="field" id="f7_8"></div>
-    			<div class="field" id="f7_9"></div>
-    			<div class="field" id="f7_10"></div>
-    			<div class="field" id="f7_11"></div>
-    			<div class="field" id="f7_12"></div>
-    			<div class="field" id="f7_13"></div>
-    			<div class="field" id="f7_14"></div>
-    			<div class="field" id="f7_15"></div>
-    			<div class="field" id="f7_16"></div>
-    			<div class="field" id="f7_17"></div>
-    			<div class="field" id="f7_18"></div>
-    			<div class="field" id="f7_19"></div>
-    			<div class="field" id="f7_20"></div>
-    			<div class="field" id="f7_21"></div>
-    			<div class="field" id="f7_22"></div>
-    			<div class="field" id="f7_23"></div>
-    			<div class="field" id="f7_24"></div>
-    			<div class="field" id="f7_25"></div>
-    			<div class="field" id="f7_26"></div>
-    			<div class="field" id="f7_27"></div>
-    			<div class="field" id="f7_28"></div>
-    			<div class="field" id="f7_29"></div>
-    			<div class="field" id="f8_0"></div>
-    			<div class="field" id="f8_1"></div>
-    			<div class="field" id="f8_2"></div>
-    			<div class="field" id="f8_3"></div>
-    			<div class="field" id="f8_4"></div>
-    			<div class="field" id="f8_5"></div>
-    			<div class="field" id="f8_6"></div>
-    			<div class="field" id="f8_7"></div>
-    			<div class="field" id="f8_8"></div>
-    			<div class="field" id="f8_9"></div>
-    			<div class="field" id="f8_10"></div>
-    			<div class="field" id="f8_11"></div>
-    			<div class="field" id="f8_12"></div>
-    			<div class="field" id="f8_13"></div>
-    			<div class="field" id="f8_14"></div>
-    			<div class="field" id="f8_15"></div>
-    			<div class="field" id="f8_16"></div>
-    			<div class="field" id="f8_17"></div>
-    			<div class="field" id="f8_18"></div>
-    			<div class="field" id="f8_19"></div>
-    			<div class="field" id="f8_20"></div>
-    			<div class="field" id="f8_21"></div>
-    			<div class="field" id="f8_22"></div>
-    			<div class="field" id="f8_23"></div>
-    			<div class="field" id="f8_24"></div>
-    			<div class="field" id="f8_25"></div>
-    			<div class="field" id="f8_26"></div>
-    			<div class="field" id="f8_27"></div>
-    			<div class="field" id="f8_28"></div>
-    			<div class="field" id="f8_29"></div>
-    			<div class="field" id="f9_0"></div>
-    			<div class="field" id="f9_1"></div>
-    			<div class="field" id="f9_2"></div>
-    			<div class="field" id="f9_3"></div>
-    			<div class="field" id="f9_4"></div>
-    			<div class="field" id="f9_5"></div>
-    			<div class="field" id="f9_6"></div>
-    			<div class="field" id="f9_7"></div>
-    			<div class="field" id="f9_8"></div>
-    			<div class="field" id="f9_9"></div>
-    			<div class="field" id="f9_10"></div>
-    			<div class="field" id="f9_11"></div>
-    			<div class="field" id="f9_12"></div>
-    			<div class="field" id="f9_13"></div>
-    			<div class="field" id="f9_14"></div>
-    			<div class="field" id="f9_15"></div>
-    			<div class="field" id="f9_16"></div>
-    			<div class="field" id="f9_17"></div>
-    			<div class="field" id="f9_18"></div>
-    			<div class="field" id="f9_19"></div>
-    			<div class="field" id="f9_20"></div>
-    			<div class="field" id="f9_21"></div>
-    			<div class="field" id="f9_22"></div>
-    			<div class="field" id="f9_23"></div>
-    			<div class="field" id="f9_24"></div>
-    			<div class="field" id="f9_25"></div>
-    			<div class="field" id="f9_26"></div>
-    			<div class="field" id="f9_27"></div>
-    			<div class="field" id="f9_28"></div>
-    			<div class="field" id="f9_29"></div>
-    			<div class="field" id="f10_0"></div>
-    			<div class="field" id="f10_1"></div>
-    			<div class="field" id="f10_2"></div>
-    			<div class="field" id="f10_3"></div>
-    			<div class="field" id="f10_4"></div>
-    			<div class="field" id="f10_5"></div>
-    			<div class="field" id="f10_6"></div>
-    			<div class="field" id="f10_7"></div>
-    			<div class="field" id="f10_8"></div>
-    			<div class="field" id="f10_9"></div>
-    			<div class="field" id="f10_10"></div>
-    			<div class="field" id="f10_11"></div>
-    			<div class="field" id="f10_12"></div>
-    			<div class="field" id="f10_13"></div>
-    			<div class="field" id="f10_14"></div>
-    			<div class="field" id="f10_15"></div>
-    			<div class="field" id="f10_16"></div>
-    			<div class="field" id="f10_17"></div>
-    			<div class="field" id="f10_18"></div>
-    			<div class="field" id="f10_19"></div>
-    			<div class="field" id="f10_20"></div>
-    			<div class="field" id="f10_21"></div>
-    			<div class="field" id="f10_22"></div>
-    			<div class="field" id="f10_23"></div>
-    			<div class="field" id="f10_24"></div>
-    			<div class="field" id="f10_25"></div>
-    			<div class="field" id="f10_26"></div>
-    			<div class="field" id="f10_27"></div>
-    			<div class="field" id="f10_28"></div>
-    			<div class="field" id="f10_29"></div>
-    			<div class="field" id="f11_0"></div>
-    			<div class="field" id="f11_1"></div>
-    			<div class="field" id="f11_2"></div>
-    			<div class="field" id="f11_3"></div>
-    			<div class="field" id="f11_4"></div>
-    			<div class="field" id="f11_5"></div>
-    			<div class="field" id="f11_6"></div>
-    			<div class="field" id="f11_7"></div>
-    			<div class="field" id="f11_8"></div>
-    			<div class="field" id="f11_9"></div>
-    			<div class="field" id="f11_10"></div>
-    			<div class="field" id="f11_11"></div>
-    			<div class="field" id="f11_12"></div>
-    			<div class="field" id="f11_13"></div>
-    			<div class="field" id="f11_14"></div>
-    			<div class="field" id="f11_15"></div>
-    			<div class="field" id="f11_16"></div>
-    			<div class="field" id="f11_17"></div>
-    			<div class="field" id="f11_18"></div>
-    			<div class="field" id="f11_19"></div>
-    			<div class="field" id="f11_20"></div>
-    			<div class="field" id="f11_21"></div>
-    			<div class="field" id="f11_22"></div>
-    			<div class="field" id="f11_23"></div>
-    			<div class="field" id="f11_24"></div>
-    			<div class="field" id="f11_25"></div>
-    			<div class="field" id="f11_26"></div>
-    			<div class="field" id="f11_27"></div>
-    			<div class="field" id="f11_28"></div>
-    			<div class="field" id="f11_29"></div>
-    			<div class="field" id="f12_0"></div>
-    			<div class="field" id="f12_1"></div>
-    			<div class="field" id="f12_2"></div>
-    			<div class="field" id="f12_3"></div>
-    			<div class="field" id="f12_4"></div>
-    			<div class="field" id="f12_5"></div>
-    			<div class="field" id="f12_6"></div>
-    			<div class="field" id="f12_7"></div>
-    			<div class="field" id="f12_8"></div>
-    			<div class="field" id="f12_9"></div>
-    			<div class="field" id="f12_10"></div>
-    			<div class="field" id="f12_11"></div>
-    			<div class="field" id="f12_12"></div>
-    			<div class="field" id="f12_13"></div>
-    			<div class="field" id="f12_14"></div>
-    			<div class="field" id="f12_15"></div>
-    			<div class="field" id="f12_16"></div>
-    			<div class="field" id="f12_17"></div>
-    			<div class="field" id="f12_18"></div>
-    			<div class="field" id="f12_19"></div>
-    			<div class="field" id="f12_20"></div>
-    			<div class="field" id="f12_21"></div>
-    			<div class="field" id="f12_22"></div>
-    			<div class="field" id="f12_23"></div>
-    			<div class="field" id="f12_24"></div>
-    			<div class="field" id="f12_25"></div>
-    			<div class="field" id="f12_26"></div>
-    			<div class="field" id="f12_27"></div>
-    			<div class="field" id="f12_28"></div>
-    			<div class="field" id="f12_29"></div>
-    			<div class="field" id="f13_0"></div>
-    			<div class="field" id="f13_1"></div>
-    			<div class="field" id="f13_2"></div>
-    			<div class="field" id="f13_3"></div>
-    			<div class="field" id="f13_4"></div>
-    			<div class="field" id="f13_5"></div>
-    			<div class="field" id="f13_6"></div>
-    			<div class="field" id="f13_7"></div>
-    			<div class="field" id="f13_8"></div>
-    			<div class="field" id="f13_9"></div>
-    			<div class="field" id="f13_10"></div>
-    			<div class="field" id="f13_11"></div>
-    			<div class="field" id="f13_12"></div>
-    			<div class="field" id="f13_13"></div>
-    			<div class="field" id="f13_14"></div>
-    			<div class="field" id="f13_15"></div>
-    			<div class="field" id="f13_16"></div>
-    			<div class="field" id="f13_17"></div>
-    			<div class="field" id="f13_18"></div>
-    			<div class="field" id="f13_19"></div>
-    			<div class="field" id="f13_20"></div>
-    			<div class="field" id="f13_21"></div>
-    			<div class="field" id="f13_22"></div>
-    			<div class="field" id="f13_23"></div>
-    			<div class="field" id="f13_24"></div>
-    			<div class="field" id="f13_25"></div>
-    			<div class="field" id="f13_26"></div>
-    			<div class="field" id="f13_27"></div>
-    			<div class="field" id="f13_28"></div>
-    			<div class="field" id="f13_29"></div>
-    			<div class="field" id="f14_0"></div>
-    			<div class="field" id="f14_1"></div>
-    			<div class="field" id="f14_2"></div>
-    			<div class="field" id="f14_3"></div>
-    			<div class="field" id="f14_4"></div>
-    			<div class="field" id="f14_5"></div>
-    			<div class="field" id="f14_6"></div>
-    			<div class="field" id="f14_7"></div>
-    			<div class="field" id="f14_8"></div>
-    			<div class="field" id="f14_9"></div>
-    			<div class="field" id="f14_10"></div>
-    			<div class="field" id="f14_11"></div>
-    			<div class="field" id="f14_12"></div>
-    			<div class="field" id="f14_13"></div>
-    			<div class="field" id="f14_14"></div>
-    			<div class="field" id="f14_15"></div>
-    			<div class="field" id="f14_16"></div>
-    			<div class="field" id="f14_17"></div>
-    			<div class="field" id="f14_18"></div>
-    			<div class="field" id="f14_19"></div>
-    			<div class="field" id="f14_20"></div>
-    			<div class="field" id="f14_21"></div>
-    			<div class="field" id="f14_22"></div>
-    			<div class="field" id="f14_23"></div>
-    			<div class="field" id="f14_24"></div>
-    			<div class="field" id="f14_25"></div>
-    			<div class="field" id="f14_26"></div>
-    			<div class="field" id="f14_27"></div>
-    			<div class="field" id="f14_28"></div>
-    			<div class="field" id="f14_29"></div>
-    			<div class="field" id="f15_0"></div>
-    			<div class="field" id="f15_1"></div>
-    			<div class="field" id="f15_2"></div>
-    			<div class="field" id="f15_3"></div>
-    			<div class="field" id="f15_4"></div>
-    			<div class="field" id="f15_5"></div>
-    			<div class="field" id="f15_6"></div>
-    			<div class="field" id="f15_7"></div>
-    			<div class="field" id="f15_8"></div>
-    			<div class="field" id="f15_9"></div>
-    			<div class="field" id="f15_10"></div>
-    			<div class="field" id="f15_11"></div>
-    			<div class="field" id="f15_12"></div>
-    			<div class="field" id="f15_13"></div>
-    			<div class="field" id="f15_14"></div>
-    			<div class="field" id="f15_15"></div>
-    			<div class="field" id="f15_16"></div>
-    			<div class="field" id="f15_17"></div>
-    			<div class="field" id="f15_18"></div>
-    			<div class="field" id="f15_19"></div>
-    			<div class="field" id="f15_20"></div>
-    			<div class="field" id="f15_21"></div>
-    			<div class="field" id="f15_22"></div>
-    			<div class="field" id="f15_23"></div>
-    			<div class="field" id="f15_24"></div>
-    			<div class="field" id="f15_25"></div>
-    			<div class="field" id="f15_26"></div>
-    			<div class="field" id="f15_27"></div>
-    			<div class="field" id="f15_28"></div>
-    			<div class="field" id="f15_29"></div>
-    			<div class="field" id="f16_0"></div>
-    			<div class="field" id="f16_1"></div>
-    			<div class="field" id="f16_2"></div>
-    			<div class="field" id="f16_3"></div>
-    			<div class="field" id="f16_4"></div>
-    			<div class="field" id="f16_5"></div>
-    			<div class="field" id="f16_6"></div>
-    			<div class="field" id="f16_7"></div>
-    			<div class="field" id="f16_8"></div>
-    			<div class="field" id="f16_9"></div>
-    			<div class="field" id="f16_10"></div>
-    			<div class="field" id="f16_11"></div>
-    			<div class="field" id="f16_12"></div>
-    			<div class="field" id="f16_13"></div>
-    			<div class="field" id="f16_14"></div>
-    			<div class="field" id="f16_15"></div>
-    			<div class="field" id="f16_16"></div>
-    			<div class="field" id="f16_17"></div>
-    			<div class="field" id="f16_18"></div>
-    			<div class="field" id="f16_19"></div>
-    			<div class="field" id="f16_20"></div>
-    			<div class="field" id="f16_21"></div>
-    			<div class="field" id="f16_22"></div>
-    			<div class="field" id="f16_23"></div>
-    			<div class="field" id="f16_24"></div>
-    			<div class="field" id="f16_25"></div>
-    			<div class="field" id="f16_26"></div>
-    			<div class="field" id="f16_27"></div>
-    			<div class="field" id="f16_28"></div>
-    			<div class="field" id="f16_29"></div>
-    			<div class="field" id="f17_0"></div>
-    			<div class="field" id="f17_1"></div>
-    			<div class="field" id="f17_2"></div>
-    			<div class="field" id="f17_3"></div>
-    			<div class="field" id="f17_4"></div>
-    			<div class="field" id="f17_5"></div>
-    			<div class="field" id="f17_6"></div>
-    			<div class="field" id="f17_7"></div>
-    			<div class="field" id="f17_8"></div>
-    			<div class="field" id="f17_9"></div>
-    			<div class="field" id="f17_10"></div>
-    			<div class="field" id="f17_11"></div>
-    			<div class="field" id="f17_12"></div>
-    			<div class="field" id="f17_13"></div>
-    			<div class="field" id="f17_14"></div>
-    			<div class="field" id="f17_15"></div>
-    			<div class="field" id="f17_16"></div>
-    			<div class="field" id="f17_17"></div>
-    			<div class="field" id="f17_18"></div>
-    			<div class="field" id="f17_19"></div>
-    			<div class="field" id="f17_20"></div>
-    			<div class="field" id="f17_21"></div>
-    			<div class="field" id="f17_22"></div>
-    			<div class="field" id="f17_23"></div>
-    			<div class="field" id="f17_24"></div>
-    			<div class="field" id="f17_25"></div>
-    			<div class="field" id="f17_26"></div>
-    			<div class="field" id="f17_27"></div>
-    			<div class="field" id="f17_28"></div>
-    			<div class="field" id="f17_29"></div>
-    			<div class="field" id="f18_0"></div>
-    			<div class="field" id="f18_1"></div>
-    			<div class="field" id="f18_2"></div>
-    			<div class="field" id="f18_3"></div>
-    			<div class="field" id="f18_4"></div>
-    			<div class="field" id="f18_5"></div>
-    			<div class="field" id="f18_6"></div>
-    			<div class="field" id="f18_7"></div>
-    			<div class="field" id="f18_8"></div>
-    			<div class="field" id="f18_9"></div>
-    			<div class="field" id="f18_10"></div>
-    			<div class="field" id="f18_11"></div>
-    			<div class="field" id="f18_12"></div>
-    			<div class="field" id="f18_13"></div>
-    			<div class="field" id="f18_14"></div>
-    			<div class="field" id="f18_15"></div>
-    			<div class="field" id="f18_16"></div>
-    			<div class="field" id="f18_17"></div>
-    			<div class="field" id="f18_18"></div>
-    			<div class="field" id="f18_19"></div>
-    			<div class="field" id="f18_20"></div>
-    			<div class="field" id="f18_21"></div>
-    			<div class="field" id="f18_22"></div>
-    			<div class="field" id="f18_23"></div>
-    			<div class="field" id="f18_24"></div>
-    			<div class="field" id="f18_25"></div>
-    			<div class="field" id="f18_26"></div>
-    			<div class="field" id="f18_27"></div>
-    			<div class="field" id="f18_28"></div>
-    			<div class="field" id="f18_29"></div>
-    			<div class="field" id="f19_0"></div>
-    			<div class="field" id="f19_1"></div>
-    			<div class="field" id="f19_2"></div>
-    			<div class="field" id="f19_3"></div>
-    			<div class="field" id="f19_4"></div>
-    			<div class="field" id="f19_5"></div>
-    			<div class="field" id="f19_6"></div>
-    			<div class="field" id="f19_7"></div>
-    			<div class="field" id="f19_8"></div>
-    			<div class="field" id="f19_9"></div>
-    			<div class="field" id="f19_10"></div>
-    			<div class="field" id="f19_11"></div>
-    			<div class="field" id="f19_12"></div>
-    			<div class="field" id="f19_13"></div>
-    			<div class="field" id="f19_14"></div>
-    			<div class="field" id="f19_15"></div>
-    			<div class="field" id="f19_16"></div>
-    			<div class="field" id="f19_17"></div>
-    			<div class="field" id="f19_18"></div>
-    			<div class="field" id="f19_19"></div>
-    			<div class="field" id="f19_20"></div>
-    			<div class="field" id="f19_21"></div>
-    			<div class="field" id="f19_22"></div>
-    			<div class="field" id="f19_23"></div>
-    			<div class="field" id="f19_24"></div>
-    			<div class="field" id="f19_25"></div>
-    			<div class="field" id="f19_26"></div>
-    			<div class="field" id="f19_27"></div>
-    			<div class="field" id="f19_28"></div>
-    			<div class="field" id="f19_29"></div>
-    			<div class="field" id="f20_0"></div>
-    			<div class="field" id="f20_1"></div>
-    			<div class="field" id="f20_2"></div>
-    			<div class="field" id="f20_3"></div>
-    			<div class="field" id="f20_4"></div>
-    			<div class="field" id="f20_5"></div>
-    			<div class="field" id="f20_6"></div>
-    			<div class="field" id="f20_7"></div>
-    			<div class="field" id="f20_8"></div>
-    			<div class="field" id="f20_9"></div>
-    			<div class="field" id="f20_10"></div>
-    			<div class="field" id="f20_11"></div>
-    			<div class="field" id="f20_12"></div>
-    			<div class="field" id="f20_13"></div>
-    			<div class="field" id="f20_14"></div>
-    			<div class="field" id="f20_15"></div>
-    			<div class="field" id="f20_16"></div>
-    			<div class="field" id="f20_17"></div>
-    			<div class="field" id="f20_18"></div>
-    			<div class="field" id="f20_19"></div>
-    			<div class="field" id="f20_20"></div>
-    			<div class="field" id="f20_21"></div>
-    			<div class="field" id="f20_22"></div>
-    			<div class="field" id="f20_23"></div>
-    			<div class="field" id="f20_24"></div>
-    			<div class="field" id="f20_25"></div>
-    			<div class="field" id="f20_26"></div>
-    			<div class="field" id="f20_27"></div>
-    			<div class="field" id="f20_28"></div>
-    			<div class="field" id="f20_29"></div>
-    			<div class="field" id="f21_0"></div>
-    			<div class="field" id="f21_1"></div>
-    			<div class="field" id="f21_2"></div>
-    			<div class="field" id="f21_3"></div>
-    			<div class="field" id="f21_4"></div>
-    			<div class="field" id="f21_5"></div>
-    			<div class="field" id="f21_6"></div>
-    			<div class="field" id="f21_7"></div>
-    			<div class="field" id="f21_8"></div>
-    			<div class="field" id="f21_9"></div>
-    			<div class="field" id="f21_10"></div>
-    			<div class="field" id="f21_11"></div>
-    			<div class="field" id="f21_12"></div>
-    			<div class="field" id="f21_13"></div>
-    			<div class="field" id="f21_14"></div>
-    			<div class="field" id="f21_15"></div>
-    			<div class="field" id="f21_16"></div>
-    			<div class="field" id="f21_17"></div>
-    			<div class="field" id="f21_18"></div>
-    			<div class="field" id="f21_19"></div>
-    			<div class="field" id="f21_20"></div>
-    			<div class="field" id="f21_21"></div>
-    			<div class="field" id="f21_22"></div>
-    			<div class="field" id="f21_23"></div>
-    			<div class="field" id="f21_24"></div>
-    			<div class="field" id="f21_25"></div>
-    			<div class="field" id="f21_26"></div>
-    			<div class="field" id="f21_27"></div>
-    			<div class="field" id="f21_28"></div>
-    			<div class="field" id="f21_29"></div>
-    			<div class="field" id="f22_0"></div>
-    			<div class="field" id="f22_1"></div>
-    			<div class="field" id="f22_2"></div>
-    			<div class="field" id="f22_3"></div>
-    			<div class="field" id="f22_4"></div>
-    			<div class="field" id="f22_5"></div>
-    			<div class="field" id="f22_6"></div>
-    			<div class="field" id="f22_7"></div>
-    			<div class="field" id="f22_8"></div>
-    			<div class="field" id="f22_9"></div>
-    			<div class="field" id="f22_10"></div>
-    			<div class="field" id="f22_11"></div>
-    			<div class="field" id="f22_12"></div>
-    			<div class="field" id="f22_13"></div>
-    			<div class="field" id="f22_14"></div>
-    			<div class="field" id="f22_15"></div>
-    			<div class="field" id="f22_16"></div>
-    			<div class="field" id="f22_17"></div>
-    			<div class="field" id="f22_18"></div>
-    			<div class="field" id="f22_19"></div>
-    			<div class="field" id="f22_20"></div>
-    			<div class="field" id="f22_21"></div>
-    			<div class="field" id="f22_22"></div>
-    			<div class="field" id="f22_23"></div>
-    			<div class="field" id="f22_24"></div>
-    			<div class="field" id="f22_25"></div>
-    			<div class="field" id="f22_26"></div>
-    			<div class="field" id="f22_27"></div>
-    			<div class="field" id="f22_28"></div>
-    			<div class="field" id="f22_29"></div>
-    			<div class="field" id="f23_0"></div>
-    			<div class="field" id="f23_1"></div>
-    			<div class="field" id="f23_2"></div>
-    			<div class="field" id="f23_3"></div>
-    			<div class="field" id="f23_4"></div>
-    			<div class="field" id="f23_5"></div>
-    			<div class="field" id="f23_6"></div>
-    			<div class="field" id="f23_7"></div>
-    			<div class="field" id="f23_8"></div>
-    			<div class="field" id="f23_9"></div>
-    			<div class="field" id="f23_10"></div>
-    			<div class="field" id="f23_11"></div>
-    			<div class="field" id="f23_12"></div>
-    			<div class="field" id="f23_13"></div>
-    			<div class="field" id="f23_14"></div>
-    			<div class="field" id="f23_15"></div>
-    			<div class="field" id="f23_16"></div>
-    			<div class="field" id="f23_17"></div>
-    			<div class="field" id="f23_18"></div>
-    			<div class="field" id="f23_19"></div>
-    			<div class="field" id="f23_20"></div>
-    			<div class="field" id="f23_21"></div>
-    			<div class="field" id="f23_22"></div>
-    			<div class="field" id="f23_23"></div>
-    			<div class="field" id="f23_24"></div>
-    			<div class="field" id="f23_25"></div>
-    			<div class="field" id="f23_26"></div>
-    			<div class="field" id="f23_27"></div>
-    			<div class="field" id="f23_28"></div>
-    			<div class="field" id="f23_29"></div>
-    			<div class="field" id="f24_0"></div>
-    			<div class="field" id="f24_1"></div>
-    			<div class="field" id="f24_2"></div>
-    			<div class="field" id="f24_3"></div>
-    			<div class="field" id="f24_4"></div>
-    			<div class="field" id="f24_5"></div>
-    			<div class="field" id="f24_6"></div>
-    			<div class="field" id="f24_7"></div>
-    			<div class="field" id="f24_8"></div>
-    			<div class="field" id="f24_9"></div>
-    			<div class="field" id="f24_10"></div>
-    			<div class="field" id="f24_11"></div>
-    			<div class="field" id="f24_12"></div>
-    			<div class="field" id="f24_13"></div>
-    			<div class="field" id="f24_14"></div>
-    			<div class="field" id="f24_15"></div>
-    			<div class="field" id="f24_16"></div>
-    			<div class="field" id="f24_17"></div>
-    			<div class="field" id="f24_18"></div>
-    			<div class="field" id="f24_19"></div>
-    			<div class="field" id="f24_20"></div>
-    			<div class="field" id="f24_21"></div>
-    			<div class="field" id="f24_22"></div>
-    			<div class="field" id="f24_23"></div>
-    			<div class="field" id="f24_24"></div>
-    			<div class="field" id="f24_25"></div>
-    			<div class="field" id="f24_26"></div>
-    			<div class="field" id="f24_27"></div>
-    			<div class="field" id="f24_28"></div>
-    			<div class="field" id="f24_29"></div>
-    			<div class="field" id="f25_0"></div>
-    			<div class="field" id="f25_1"></div>
-    			<div class="field" id="f25_2"></div>
-    			<div class="field" id="f25_3"></div>
-    			<div class="field" id="f25_4"></div>
-    			<div class="field" id="f25_5"></div>
-    			<div class="field" id="f25_6"></div>
-    			<div class="field" id="f25_7"></div>
-    			<div class="field" id="f25_8"></div>
-    			<div class="field" id="f25_9"></div>
-    			<div class="field" id="f25_10"></div>
-    			<div class="field" id="f25_11"></div>
-    			<div class="field" id="f25_12"></div>
-    			<div class="field" id="f25_13"></div>
-    			<div class="field" id="f25_14"></div>
-    			<div class="field" id="f25_15"></div>
-    			<div class="field" id="f25_16"></div>
-    			<div class="field" id="f25_17"></div>
-    			<div class="field" id="f25_18"></div>
-    			<div class="field" id="f25_19"></div>
-    			<div class="field" id="f25_20"></div>
-    			<div class="field" id="f25_21"></div>
-    			<div class="field" id="f25_22"></div>
-    			<div class="field" id="f25_23"></div>
-    			<div class="field" id="f25_24"></div>
-    			<div class="field" id="f25_25"></div>
-    			<div class="field" id="f25_26"></div>
-    			<div class="field" id="f25_27"></div>
-    			<div class="field" id="f25_28"></div>
-    			<div class="field" id="f25_29"></div>
-    			<div class="field" id="f26_0"></div>
-    			<div class="field" id="f26_1"></div>
-    			<div class="field" id="f26_2"></div>
-    			<div class="field" id="f26_3"></div>
-    			<div class="field" id="f26_4"></div>
-    			<div class="field" id="f26_5"></div>
-    			<div class="field" id="f26_6"></div>
-    			<div class="field" id="f26_7"></div>
-    			<div class="field" id="f26_8"></div>
-    			<div class="field" id="f26_9"></div>
-    			<div class="field" id="f26_10"></div>
-    			<div class="field" id="f26_11"></div>
-    			<div class="field" id="f26_12"></div>
-    			<div class="field" id="f26_13"></div>
-    			<div class="field" id="f26_14"></div>
-    			<div class="field" id="f26_15"></div>
-    			<div class="field" id="f26_16"></div>
-    			<div class="field" id="f26_17"></div>
-    			<div class="field" id="f26_18"></div>
-    			<div class="field" id="f26_19"></div>
-    			<div class="field" id="f26_20"></div>
-    			<div class="field" id="f26_21"></div>
-    			<div class="field" id="f26_22"></div>
-    			<div class="field" id="f26_23"></div>
-    			<div class="field" id="f26_24"></div>
-    			<div class="field" id="f26_25"></div>
-    			<div class="field" id="f26_26"></div>
-    			<div class="field" id="f26_27"></div>
-    			<div class="field" id="f26_28"></div>
-    			<div class="field" id="f26_29"></div>
-    			<div class="field" id="f27_0"></div>
-    			<div class="field" id="f27_1"></div>
-    			<div class="field" id="f27_2"></div>
-    			<div class="field" id="f27_3"></div>
-    			<div class="field" id="f27_4"></div>
-    			<div class="field" id="f27_5"></div>
-    			<div class="field" id="f27_6"></div>
-    			<div class="field" id="f27_7"></div>
-    			<div class="field" id="f27_8"></div>
-    			<div class="field" id="f27_9"></div>
-    			<div class="field" id="f27_10"></div>
-    			<div class="field" id="f27_11"></div>
-    			<div class="field" id="f27_12"></div>
-    			<div class="field" id="f27_13"></div>
-    			<div class="field" id="f27_14"></div>
-    			<div class="field" id="f27_15"></div>
-    			<div class="field" id="f27_16"></div>
-    			<div class="field" id="f27_17"></div>
-    			<div class="field" id="f27_18"></div>
-    			<div class="field" id="f27_19"></div>
-    			<div class="field" id="f27_20"></div>
-    			<div class="field" id="f27_21"></div>
-    			<div class="field" id="f27_22"></div>
-    			<div class="field" id="f27_23"></div>
-    			<div class="field" id="f27_24"></div>
-    			<div class="field" id="f27_25"></div>
-    			<div class="field" id="f27_26"></div>
-    			<div class="field" id="f27_27"></div>
-    			<div class="field" id="f27_28"></div>
-    			<div class="field" id="f27_29"></div>
-    			<div class="field" id="f28_0"></div>
-    			<div class="field" id="f28_1"></div>
-    			<div class="field" id="f28_2"></div>
-    			<div class="field" id="f28_3"></div>
-    			<div class="field" id="f28_4"></div>
-    			<div class="field" id="f28_5"></div>
-    			<div class="field" id="f28_6"></div>
-    			<div class="field" id="f28_7"></div>
-    			<div class="field" id="f28_8"></div>
-    			<div class="field" id="f28_9"></div>
-    			<div class="field" id="f28_10"></div>
-    			<div class="field" id="f28_11"></div>
-    			<div class="field" id="f28_12"></div>
-    			<div class="field" id="f28_13"></div>
-    			<div class="field" id="f28_14"></div>
-    			<div class="field" id="f28_15"></div>
-    			<div class="field" id="f28_16"></div>
-    			<div class="field" id="f28_17"></div>
-    			<div class="field" id="f28_18"></div>
-    			<div class="field" id="f28_19"></div>
-    			<div class="field" id="f28_20"></div>
-    			<div class="field" id="f28_21"></div>
-    			<div class="field" id="f28_22"></div>
-    			<div class="field" id="f28_23"></div>
-    			<div class="field" id="f28_24"></div>
-    			<div class="field" id="f28_25"></div>
-    			<div class="field" id="f28_26"></div>
-    			<div class="field" id="f28_27"></div>
-    			<div class="field" id="f28_28"></div>
-    			<div class="field" id="f28_29"></div>
-    			<div class="field" id="f29_0"></div>
-    			<div class="field" id="f29_1"></div>
-    			<div class="field" id="f29_2"></div>
-    			<div class="field" id="f29_3"></div>
-    			<div class="field" id="f29_4"></div>
-    			<div class="field" id="f29_5"></div>
-    			<div class="field" id="f29_6"></div>
-    			<div class="field" id="f29_7"></div>
-    			<div class="field" id="f29_8"></div>
-    			<div class="field" id="f29_9"></div>
-    			<div class="field" id="f29_10"></div>
-    			<div class="field" id="f29_11"></div>
-    			<div class="field" id="f29_12"></div>
-    			<div class="field" id="f29_13"></div>
-    			<div class="field" id="f29_14"></div>
-    			<div class="field" id="f29_15"></div>
-    			<div class="field" id="f29_16"></div>
-    			<div class="field" id="f29_17"></div>
-    			<div class="field" id="f29_18"></div>
-    			<div class="field" id="f29_19"></div>
-    			<div class="field" id="f29_20"></div>
-    			<div class="field" id="f29_21"></div>
-    			<div class="field" id="f29_22"></div>
-    			<div class="field" id="f29_23"></div>
-    			<div class="field" id="f29_24"></div>
-    			<div class="field" id="f29_25"></div>
-    			<div class="field" id="f29_26"></div>
-    			<div class="field" id="f29_27"></div>
-    			<div class="field" id="f29_28"></div>
-    			<div class="field" id="f29_29"></div>
-    
+   
 </div>
 <ul id="controls">
-	<li class="buttons" id="play"><a href="#"></a></li>
-    <li id="stop"><a href="#"></a></li>
+	<li class="buttons" id="play">Run</li>
+   <li id="stop">Stop</li>
+   <li id="random">Random</li>
 </ul>
 </body>
 </html>

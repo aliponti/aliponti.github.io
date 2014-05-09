@@ -1,12 +1,10 @@
 #main {
 	background-color: #AAA;
-	height: 300px;
-	width: 300px;
 	margin-top: 20px;
 	margin-right: auto;
 	margin-left: auto;
-	padding: 10px;
-	border-radius: 10px;
+	padding: 20px;
+	border-radius: 5px;
 }
 body {
 	background-color: #FFF;
@@ -45,32 +43,10 @@ body {
 	margin: 0px;
 	padding: 0px;
 	list-style: none;
-	position: absolute;
-	top 0px;
-}
-#controls li, #controls a {
+	/*position: absolute;
+	top 0px; */
 	height: 45px;
 	width: 46px;
 	display: block;
-}
-#play {
-	left: 0px;
-	background: url(Icons.png) 0 0;
-}
-#play a:hover {
-	background: url(Icons.png) 0 -45px;
-}
-#pause {
-	left: 0px;
-	background: url(Icons.png) -46px 0;
-}
-#pause a:hover {
-	background: url(Icons.png) -46px -45px;
-}
-#stop {
-	left: 56px;
-	background: url(Icons.png) -92px 0;
-}
-#stop a:hover {
-	background: url(Icons.png) -92px -45px;
+	cursor: pointer;
 }
