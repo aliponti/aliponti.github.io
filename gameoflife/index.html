@@ -27,15 +27,15 @@ for(var y = 0; y < yWidth; y++){
 	}
 }
 
-/* Document ready, initializing main-field and onclick-functions */
+/* Document ready, initializing main-field (playground) and onclick-functions */
 $(function(){
 
-   $( "#main" ).width( 10 * xWidth ); 
-   $( "#main" ).height( 10 * yWidth );
+   $( "#playground" ).width( 10 * xWidth ); 
+   $( "#playground" ).height( 10 * yWidth );
    
 	for(var y = 0; y < yWidth; y++){
 		for(var x = 0; x < xWidth; x++){
-			$( "#main" ).append('<div class="field" id="f' + y + '_' + x + '"></div>');
+			$( "#playground" ).append('<div class="field" id="f' + y + '_' + x + '"></div>');
 		}
 	}
    
@@ -142,13 +142,14 @@ function randomField(percentage){
 </head>
 
 <body>
-<div id="main">
-   
-</div>
+<div id="maincont">
+<h1>Conway's Game of Life</h1>
+<div id="playground"></div>
 <ul id="controls">
 	<li class="buttons" id="play">Run</li>
    <li id="stop">Stop</li>
    <li id="random">Random</li>
 </ul>
+</div>
 </body>
 </html>
