@@ -33,6 +33,8 @@ $(function(){
    $( "#playground" ).width( 10 * xWidth ); 
    $( "#playground" ).height( 10 * yWidth );
    
+	$( "#maincont" ).width($( "#playground" ).width() + 40);   
+   
 	for(var y = 0; y < yWidth; y++){
 		for(var x = 0; x < xWidth; x++){
 			$( "#playground" ).append('<div class="field" id="f' + y + '_' + x + '"></div>');
