@@ -9,7 +9,7 @@ body {
   align-items: center;
   align-content: space-around;
   background-image: url("images/background.jpg");
-  background-size: conver;
+  background-size: cover;
 }
 
 body,
