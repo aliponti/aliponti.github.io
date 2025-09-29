@@ -10,6 +10,7 @@ body {
   align-content: space-around;
   background-image: url("images/background.jpg");
   background-size: cover;
+  background-position: top center;
 }
 
 body,
