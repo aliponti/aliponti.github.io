@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   var twoDaysFromNow = new Date("2025-05-29T19:00:00").getTime();
 
   // Set up FlipDown
-  var flipdown = new FlipDown(1748538000, {theme: "dark",})
+  var flipdown = new FlipDown(1759701599, {theme: "dark",})
 
     // Start the countdown
     .start()
